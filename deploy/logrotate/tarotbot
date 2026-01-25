@@ -1,0 +1,18 @@
+# Logrotate configuration for Tarot Bot
+# Place this file in /etc/logrotate.d/tarotbot
+
+/var/lib/tarotbot/*.log /opt/tarotbot/logs/*.log {
+    daily
+    rotate 14
+    missingok
+    notifempty
+    compress
+    delaycompress
+    copytruncate
+    create 0644 tarotbot tarotbot
+    sharedscripts
+    postrotate
+        /usr/bin/systemctl reload tarotbot >/dev/null 2>&1 || true
+        /usr/bin/systemctl reload tarot-support >/dev/null 2>&1 || true
+    endscript
+}

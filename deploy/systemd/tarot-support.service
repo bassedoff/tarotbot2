@@ -1,0 +1,32 @@
+[Unit]
+Description=Tarot Bot Support Service
+After=network.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=tarotbot
+Group=tarotbot
+WorkingDirectory=/opt/tarotbot
+EnvironmentFile=/etc/tarotbot/support.env
+ExecStart=/opt/tarotbot/venv/bin/python /opt/tarotbot/support.py
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=tarot-support
+
+# Security hardening
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/tarotbot
+
+# Resource limits
+LimitNOFILE=65535
+MemoryMax=256M
+CPUQuota=25%
+
+[Install]
+WantedBy=multi-user.target
